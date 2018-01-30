@@ -41,7 +41,7 @@ namespace TurnerStarterApi.Core.Features.Common
             }
 
             var result = await filteredResult
-                .Where(x => x.Id == request.Id & !x.IsDeleted)
+                .Where(x => x.Id == request.Id && !x.IsDeleted)
                 .ProjectTo<TDto>(_projectionParameters)
                 .SingleOrDefaultAsync();
 
