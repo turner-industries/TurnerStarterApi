@@ -26,9 +26,9 @@ namespace TurnerStarterApi.Api.Configuration
             _container = new Container();
 
             _container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
-            _container.Register<HttpIdentityContext>(Lifestyle.Scoped);
+            _container.Register<MacHttpIdentityContext>(Lifestyle.Scoped);
             _container.Register<IIdentityContext>(() =>
-                new HttpIdentityContextProxy(new Lazy<HttpIdentityContext>(_container.GetInstance<HttpIdentityContext>))
+                new MacHttpIdentityContextProxy(new Lazy<MacHttpIdentityContext>(_container.GetInstance<MacHttpIdentityContext>))
             );
 
             _container.Register<DbContext>(() =>
