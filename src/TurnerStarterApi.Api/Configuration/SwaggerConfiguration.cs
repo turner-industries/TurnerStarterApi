@@ -22,7 +22,7 @@ namespace TurnerStarterApi.Api.Configuration
                     }
                 });
 
-                options.OperationFilter<HideIdFilter>();
+                options.OperationFilter<HideRouteParams>();
             });
         }
 
@@ -36,7 +36,7 @@ namespace TurnerStarterApi.Api.Configuration
             });
         }
 
-        public class HideIdFilter : IOperationFilter
+        public class HideRouteParams : IOperationFilter
         {
             public void Apply(Operation operation, OperationFilterContext context)
             {
@@ -45,20 +45,20 @@ namespace TurnerStarterApi.Api.Configuration
                     return;
                 }
 
+                var pathParams = operation.Parameters.Where(x => x.In == "path").ToList();
                 foreach (var operationParameter in operation.Parameters.ToList())
                 {
                     var bodyParameter = operationParameter as BodyParameter;
-                    if (bodyParameter == null)
+                    var parameterName = bodyParameter?.Schema?.Ref?.Replace("#/definitions/", string.Empty);
+                    if (parameterName == null)
                     {
                         continue;
                     }
 
-                    var parameterName = bodyParameter.Schema.Ref.Replace("#/definitions/", string.Empty);
-
                     var schema = context.SchemaRegistry.Definitions[parameterName];
                     foreach (var schemaProperty in schema.Properties.ToList())
                     {
-                        if (schemaProperty.Key == "id")
+                        if (pathParams.Any(x => x.Name == schemaProperty.Key))
                         {
                             schema.Properties.Remove(schemaProperty);
                         }
