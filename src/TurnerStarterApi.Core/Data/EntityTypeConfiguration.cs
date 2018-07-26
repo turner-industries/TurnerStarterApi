@@ -27,7 +27,7 @@ namespace TurnerStarterApi.Core.Data
         }
     }
 
-    public static class ModelBuilderExtenions
+    public static class ModelBuilderExtensions
     {
         public static void AddFromAssembly(this ModelBuilder modelBuilder, Assembly assembly)
         {
