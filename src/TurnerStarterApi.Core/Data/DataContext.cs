@@ -5,22 +5,11 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using TurnerStarterApi.Core.Features.Security;
 
 namespace TurnerStarterApi.Core.Data
 {
-    public class DataContextFactory : IDesignTimeDbContextFactory<DataContext>
-    {
-        public DataContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<DataContext>();
-
-            return new DataContext(optionsBuilder.Options);
-        }
-    }
-
     public class DataContext : DbContext
     {
         private readonly IIdentityContext _identityContext;
