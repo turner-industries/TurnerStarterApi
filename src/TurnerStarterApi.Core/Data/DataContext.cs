@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using TurnerStarterApi.Core.Features.Security;
 
 namespace TurnerStarterApi.Core.Data
@@ -19,6 +21,21 @@ namespace TurnerStarterApi.Core.Data
         public DataContext(IIdentityContext identityContext, DbContextOptions options) : base(options)
         {
             _identityContext = identityContext;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+            if (builder.IsConfigured)
+            {
+                return;
+            }
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            builder.UseSqlServer(configuration.GetConnectionString("DataContext"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
